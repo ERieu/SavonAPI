@@ -1,0 +1,16 @@
+package org.ldv.savonapi.model.entity
+
+import jakarta.persistence.*
+
+@Entity
+class Caracteristique(
+    @Id
+    @GeneratedValue( strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
+    var nom: String? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "idCaracteristique")
+    var mention: List<Mention>? = null
+) {
+}
