@@ -17,7 +17,7 @@ class Savon (
     var titre: String,
     var apportEnEau: Float,
     var surgraissage: Float,
-    var qteAlcalin :Float? = null,
+    var qteAlcalin: Float? = null,
 
     @OneToMany(mappedBy = "savon")
     var lignes: MutableList<Ligne> = mutableListOf(),
@@ -25,9 +25,7 @@ class Savon (
     @OneToMany(mappedBy = "savon")
     var resultats: MutableList<Resultat> = mutableListOf(),
 ) {
-    fun calculQteAlcalin(
-
-    ) {
+    fun calculQteAlcalin() {
         // Étape 1 : Initialiser qteAlcalinNormal à 0
         var qteAlcalinNormal = 0.0f
 
@@ -48,5 +46,24 @@ class Savon (
 
         // Étape 5 : Stocker le résultat en tant que Float
         this.qteAlcalin = qteAlcalin.toFloat()
+    }
+
+    fun calculApportEau() {
+        // Étape 1 : Obtenir la concentration en eau
+        val concentrationEau = (100 - concentrationAlcalin) / 100
+
+        // Étape 2 : Calculer l'apport en eau
+        val apportEau = qteAlcalin?.times(concentrationEau) ?: 0f
+
+        // Étape 3 : Assigner apportEau à this.apportEnEau
+        this.apportEnEau = apportEau
+    }
+
+    fun calculScoreNonPondere() {
+        val ins = this.lignes.sumOf { it.ingredient!!.ins.toDouble() * (it.pourcentage / 100.0f) }
+        val iode = this.lignes.sumOf { it.ingredient!!.iode.toDouble() * (it.pourcentage / 100.0f) }
+
+        this.resultats.find { it.caracteristique!!.nom == "ins" }!!.score = ins.toFloat()
+        this.resultats.find { it.caracteristique!!.nom == "iode" }!!.score = iode.toFloat()
     }
 }

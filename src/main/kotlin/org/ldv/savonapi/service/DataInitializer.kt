@@ -1,5 +1,6 @@
 package org.ldv.savonapi.service
 
+import org.ldv.savonapi.model.dao.CaracteristiqueDAO
 import org.ldv.savonapi.model.dao.IngredientDAO
 import org.ldv.savonapi.model.entity.Ingredient
 import org.springframework.boot.CommandLineRunner
